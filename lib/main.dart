@@ -15,29 +15,50 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-        appBar: AppBar(
-          title: Text('App Upgrade Example'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('App Upgrade Example'),
+      ),
+      body: Center(
+        child: TextButton(
+          child: Text('Check for Updates'),
+          onPressed: () {
+            checkForUpdates(context);
+          },
         ),
-        body: UpgradeAlert(
-          child: Center(
-            child: TextButton(
-              child: Text('Check for Updates'),
-              onPressed: () {
-                showUpdateDialog(context);
-              },
-            ),
-          ),
-        ),
-      );
-
+      ),
+    );
   }
 
-  void showUpdateDialog(BuildContext context) async {
+  void checkForUpdates(BuildContext context) async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     String currentVersion = packageInfo.version;
+    String newVersion = '1.0.1'; // Hardcoded for demonstration
 
-    String newVersion = '1.0.35'; // Hardcoded for demonstration
+    if (currentVersion == newVersion) {
+      // If no update is available, show a dialog informing the user
+      showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: Text('No Update Available'),
+          content: Text('Your app is already up to date.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('OK'),
+            ),
+          ],
+        ),
+      );
+    } else {
+      showUpdateDialog(context, currentVersion, newVersion);
+    }
+  }
+
+  void showUpdateDialog(
+      BuildContext context, String currentVersion, String newVersion) async {
     final dialogResult = await showDialog(
       context: context,
       builder: (BuildContext context) => CupertinoAlertDialog(

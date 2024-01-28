@@ -15,26 +15,29 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('App Upgrade Example'),
-      ),
-      body: Center(
-        child: TextButton(
-          child: Text('Check for Updates'),
-          onPressed: () {
-            showUpdateDialog(context);
-          },
+    return  Scaffold(
+        appBar: AppBar(
+          title: Text('App Upgrade Example'),
         ),
-      ),
-    );
+        body: UpgradeAlert(
+          child: Center(
+            child: TextButton(
+              child: Text('Check for Updates'),
+              onPressed: () {
+                showUpdateDialog(context);
+              },
+            ),
+          ),
+        ),
+      );
+
   }
 
   void showUpdateDialog(BuildContext context) async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     String currentVersion = packageInfo.version;
 
-    String newVersion = '1.0.35';
+    String newVersion = '1.0.35'; // Hardcoded for demonstration
     final dialogResult = await showDialog(
       context: context,
       builder: (BuildContext context) => CupertinoAlertDialog(
@@ -43,7 +46,8 @@ class MyApp extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text( ' نسخة جديدة من كلامي متوفرة\n النسخة الحالية هي :$currentVersion '),
+            Text(
+                ' نسخة جديدة من كلامي متوفرة\n النسخة الحالية هي :$currentVersion '),
             SizedBox(height: 10),
             Text(
               ' النسخة الجديدة :   $newVersion', // Replace with your new version
@@ -70,7 +74,8 @@ class MyApp extends StatelessWidget {
           CupertinoDialogAction(
             child: Text('حدث الآن'),
             onPressed: () {
-              String appUrl = 'https://play.google.com/store/apps/details?id=com.cptit.tal3thoom';
+              String appUrl =
+                  'https://play.google.com/store/apps/details?id=com.cptit.tal3thoom';
               launch(appUrl);
               Navigator.pop(context, true);
             },
